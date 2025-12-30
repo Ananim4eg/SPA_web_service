@@ -1,7 +1,30 @@
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from materials.models import Course, Lesson
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('Email обязателен')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Суперпользователь должен иметь is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Суперпользователь должен иметь is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
 
 
 class CustomUser(AbstractUser):
@@ -16,6 +39,8 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    objects = CustomUserManager()
+
     def __str__(self):
         return self.email
 
@@ -25,7 +50,7 @@ class CustomUser(AbstractUser):
         ordering = ['email']
 
 
-class Payments(models.Model):
+class Payment(models.Model):
     """Модель платежей"""
 
     STATUS_CHOICES = [
@@ -35,7 +60,7 @@ class Payments(models.Model):
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='пользователь')
     date = models.DateField(auto_now_add=True, verbose_name='дата платежа')
-    course = models.ForeignKey(Course, on_delete=models.PROTECT, verbose_name='оплаченный курс')
-    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='оплаченный урок')
+    course = models.ForeignKey(Course, on_delete=models.PROTECT, verbose_name='оплаченный курс', null=True, blank=True)
+    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='оплаченный урок', null=True, blank=True)
     amount = models.PositiveIntegerField(verbose_name='сумма оплаты')
     payment_method = models.CharField(choices=STATUS_CHOICES, verbose_name='способ оплаты')
