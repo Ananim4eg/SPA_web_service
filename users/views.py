@@ -1,14 +1,14 @@
 from rest_framework import viewsets, status
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import Payment, CustomUser
 from users.serializers import PaymentSerializer, MyTokenObtainPairSerializer, UserRegistrationSerializer, \
-    UserSerializer
+    UserSerializer, AdminUserListSerializer
 
 
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -60,3 +60,9 @@ class UserDeleteView(DestroyAPIView):
     """Представление для удаления пользователя"""
     queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
+
+
+class AdminUserListView(ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = AdminUserListSerializer
+    permission_classes = [IsAdminUser]

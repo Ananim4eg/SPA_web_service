@@ -46,3 +46,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ('id', 'email', 'avatar', 'phone_number', 'city')
         read_only_fields = ('id',)
+
+
+class AdminUserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'email', 'avatar', 'phone_number', 'city', 'is_active', 'is_staff', 'date_joined')

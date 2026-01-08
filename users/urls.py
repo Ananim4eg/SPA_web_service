@@ -6,7 +6,8 @@ from rest_framework_simplejwt.views import (
 )
 
 from users.apps import UsersConfig
-from users.views import PaymentViewSet, RegisterView, UserListView, UserDetailView, UserUpdateView, UserDeleteView
+from users.views import PaymentViewSet, RegisterView, UserListView, UserDetailView, UserUpdateView, UserDeleteView, \
+    AdminUserListView
 
 app_name = UsersConfig.name
 
@@ -23,5 +24,7 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetailView.as_view(), name='user_detail'),
     path('users/<int:pk>/update/', UserUpdateView.as_view(), name='user_update'),
     path('users/<int:pk>/delete/', UserDeleteView.as_view(), name='user_delete'),
+
+    path('admin/', AdminUserListView.as_view(), name='admin_panel')
 
 ] + router.urls
