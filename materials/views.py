@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from materials.models import Course, Lesson
 from materials.serializers import CourseSerializer, LessonSerializer
-from users.permissions import IsModerator
+from users.permissions import IsModerator, IsOwner
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -14,13 +14,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             self.permission_classes = [IsAuthenticated, IsModerator]
         elif self.action == 'update':
-            self.permission_classes = [IsAuthenticated, IsModerator]
+            self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
         elif self.action == 'retrieve':
-            self.permission_classes = [IsAuthenticated, IsModerator]
+            self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
         elif self.action == 'create':
             self.permission_classes = [IsAuthenticated, ~IsModerator]
         elif self.action == 'delete':
-            self.permission_classes = [IsAuthenticated, ~IsModerator]
+            self.permission_classes = [IsAuthenticated, ~IsModerator & IsOwner]
         return [permission() for permission in self.permission_classes]
 
     def perform_create(self, serializer):
@@ -44,15 +44,15 @@ class LessonListApiView(generics.ListAPIView):
 class LessonRetrieveApiView(generics.RetrieveAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsModerator]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
 
 class LessonUpdateApiView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsModerator]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
 
 class LessonDeleteApiView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, ~IsModerator]
+    permission_classes = [IsAuthenticated, ~IsModerator & IsOwner]
