@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
 from materials.models import Course, Lesson
+from materials.validators import validate_forbidden_urls
 
 
 class LessonSerializer(serializers.ModelSerializer):
+    video_url = serializers.URLField(validators=[validate_forbidden_urls])
 
     class Meta:
         model = Lesson
