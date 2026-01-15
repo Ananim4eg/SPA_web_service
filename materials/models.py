@@ -22,7 +22,7 @@ class Lesson(models.Model):
     description = models.TextField(null=True, blank=True, verbose_name='описание')
     preview_lesson = models.ImageField(upload_to='preview/', verbose_name='превью урока', null=True, blank=True)
     video_url = models.URLField(null=True, blank=True, verbose_name='ссылка на видео')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE,related_name='get_lesson', verbose_name='название курса')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='get_lesson', verbose_name='название курса')
     owner = models.ForeignKey('users.CustomUser', on_delete=models.SET_NULL, verbose_name='Владелец', null=True, blank=True)
 
     def __str__(self):
@@ -31,3 +31,32 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "урок"
         verbose_name_plural = "уроки"
+
+
+class Subscription(models.Model):
+    """Модель наличия у пользователя подписки на курс"""
+    user = models.ForeignKey(
+        'users.CustomUser',
+        on_delete=models.SET_NULL,
+        verbose_name='Пользователь',
+        null=True,
+        blank=True,
+        related_name="get_subscriptions"
+    )
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        verbose_name='курс',
+        null=True,
+        blank=True,
+        related_name="get_subscribers"
+    )
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    def __str__(self):
+        return f"{self.user.username} → {self.course.title}"
+
+    class Meta:
+        unique_together = ('user', 'course')

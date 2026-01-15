@@ -6,6 +6,7 @@ from materials.models import Course, Lesson
 
 
 class CustomUserManager(BaseUserManager):
+    """Управление созданием пользователей"""
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Email обязателен')
