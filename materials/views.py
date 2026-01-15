@@ -20,7 +20,7 @@ class CourseViewSet(viewsets.ModelViewSet):
             self.permission_classes = [IsAuthenticated, IsModerator]
         elif self.action == 'update':
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
-        elif self.action == 'retrieve':
+        elif self.action == 'detail':
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
         elif self.action == 'create':
             self.permission_classes = [IsAuthenticated, ~IsModerator]
@@ -66,7 +66,7 @@ class LessonUpdateApiView(generics.UpdateAPIView):
 class LessonDeleteApiView(generics.DestroyAPIView):
     """Представление для удаления уроков"""
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, ~IsModerator & IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner & ~IsModerator]
 
 
 class SubscribeToCourseView(APIView):
@@ -91,8 +91,6 @@ class SubscribeToCourseView(APIView):
             # Формируем ответное сообщение
             action = 'отписан от курса' if not subscription.is_active else 'подписан на курс'
             message = f'Успешно {action} {course.course_name}'
-
-            print(course.course_name)
 
             return Response({
                 'message': message,

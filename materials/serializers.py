@@ -6,7 +6,7 @@ from materials.validators import validate_forbidden_urls
 
 class LessonSerializer(serializers.ModelSerializer):
     """Сериализатор для уроков"""
-    video_url = serializers.URLField(validators=[validate_forbidden_urls])
+    video_url = serializers.URLField(validators=[validate_forbidden_urls],required=False)
 
     class Meta:
         model = Lesson
