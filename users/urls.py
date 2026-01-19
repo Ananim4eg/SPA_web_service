@@ -25,6 +25,8 @@ urlpatterns = [
     path('users/<int:pk>/update/', UserUpdateView.as_view(), name='user_update'),
     path('users/<int:pk>/delete/', UserDeleteView.as_view(), name='user_delete'),
 
-    path('admin/', AdminUserListView.as_view(), name='admin_panel')
+    path('admin/', AdminUserListView.as_view(), name='admin_panel'),
+
+    path("/payment/", PaymentViewSet.as_view, name='payment')
 
 ] + router.urls

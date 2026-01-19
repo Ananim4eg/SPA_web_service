@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -73,6 +75,28 @@ class SubscribeToCourseView(APIView):
     """Представление для подписки/отписки на курсы"""
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_description="Осуществление подписки на курс или отписки от курса",
+        operation_summary="Подписка / отписка",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'course_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='ID курса')
+            },
+            required=['course_id']
+        ),
+        responses={
+            200: openapi.Response(
+                description="Успешно отписан от курса / Успешно подписан на курс"
+            ),
+            201: openapi.Response(
+                description="Успешно подписан на курс"
+            ),
+            400: "Ошибка валидации данных",
+            401: "Не авторизован"
+        },
+        tags=['subscribe']
+    )
     def post(self, request):
         course_id = request.data.get('course_id')
         course = Course.objects.get(id=course_id)

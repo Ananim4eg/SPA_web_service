@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
@@ -6,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from users.services import convert_rub_to_usd, create_product_price_in_stripe, create_payment_link_in_stripe
 from users.models import Payment, CustomUser
 from users.serializers import PaymentSerializer, MyTokenObtainPairSerializer, UserRegistrationSerializer, \
     UserSerializer, AdminUserListSerializer
@@ -18,6 +21,19 @@ class PaymentViewSet(viewsets.ModelViewSet):
     filter_backends = [OrderingFilter,]
     ordering_fields = ['date', 'course', 'lesson', 'payment_method']
 
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        amount_usd = convert_rub_to_usd(payment.amount)
+
+        if payment.course:
+            payment_id = create_product_price_in_stripe(payment.course.course_name, amount_usd)
+        else:
+            payment_id = create_product_price_in_stripe(payment.lesson.lesson_name, amount_usd)
+
+        payment_url = create_payment_link_in_stripe(payment_id)
+        payment.payment_url = payment_url
+        payment.save()
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     """Представление для получения JWT токена"""
@@ -27,6 +43,26 @@ class MyTokenObtainPairView(TokenObtainPairView):
 class RegisterView(APIView):
     """Представление для регистрации"""
 
+    @swagger_auto_schema(
+        operation_description="Регистрация",
+        operation_summary="Регистрация нового пользователя",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description='Почта'),
+                "password": openapi.Schema(type=openapi.TYPE_STRING, description='Пароль'),
+                "confirm_password": openapi.Schema(type=openapi.TYPE_STRING, description='Подтверждение пароля')
+            },
+            required=['email', "password", "confirm_password"]
+        ),
+        responses={
+            201: openapi.Response(
+                description="1"
+            ),
+            400: "Ошибка валидации данных"
+        },
+        tags=['register']
+    )
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
