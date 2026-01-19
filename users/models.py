@@ -59,9 +59,10 @@ class Payment(models.Model):
         ('remittance', 'перевод'),
     ]
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='пользователь')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='пользователь', null=True, blank=True)
     date = models.DateField(auto_now_add=True, verbose_name='дата платежа')
     course = models.ForeignKey(Course, on_delete=models.PROTECT, verbose_name='оплаченный курс', null=True, blank=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='оплаченный урок', null=True, blank=True)
     amount = models.PositiveIntegerField(verbose_name='сумма оплаты')
     payment_method = models.CharField(choices=STATUS_CHOICES, verbose_name='способ оплаты')
+    payment_url = models.URLField(default=None, null=True, blank=True, verbose_name='ссылка на платеж')

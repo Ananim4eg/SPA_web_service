@@ -112,3 +112,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+
+CURRENCY_API_KEY = os.getenv("CURRENCY_API_KEY")
