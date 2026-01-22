@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -21,12 +22,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'drf_yasg',
 
     "rest_framework",
     "materials",
     "users",
     "rest_framework_simplejwt",
+    'drf_yasg',
+    'django_celery_beat',
 ]
 
 REST_FRAMEWORK = {
@@ -116,3 +118,19 @@ AUTH_USER_MODEL = 'users.CustomUser'
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 CURRENCY_API_KEY = os.getenv("CURRENCY_API_KEY")
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
+
+CELERY_TIMEZONE = TIME_ZONE
+
+CELERY_TASK_TRACK_STARTED = True
+
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_BEAT_SCHEDULE = {
+    'task-name': {
+        'task': 'myapp.tasks.my_task',
+        'schedule': timedelta(minutes=10),
+    },
+}
