@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from materials.models import Course, Lesson, Subscription
 from materials.paginators import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
+from materials.tasks import send_message_about_update
 from users.permissions import IsModerator, IsOwner
 
 
@@ -32,6 +33,19 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+
+        response = super().update(request, *args, **kwargs)
+        emails = []
+        obj = self.get_object()
+        pk = obj.pk
+        user_list = Subscription.objects.filter(course=pk)
+        for user in user_list:
+            emails.append(user.user.email)
+        send_message_about_update.delay(emails, obj.course_name)
+
+        return response
 
 
 class LessonCreateApiView(generics.CreateAPIView):
