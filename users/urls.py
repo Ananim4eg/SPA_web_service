@@ -27,6 +27,6 @@ urlpatterns = [
 
     path('admin/', AdminUserListView.as_view(), name='admin_panel'),
 
-    path("/payment/", PaymentViewSet.as_view, name='payment')
+    path("payment/", PaymentViewSet.as_view, name='payment')
 
 ] + router.urls

@@ -1,10 +1,6 @@
-from lib2to3.pgen2.tokenize import group
-
 from django.contrib.auth.models import Group
-from django.template.context_processors import request
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.test import APITestCase
 
 from materials.models import Lesson, Course

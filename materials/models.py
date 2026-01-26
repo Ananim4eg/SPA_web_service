@@ -56,7 +56,7 @@ class Subscription(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.username} → {self.course.title}"
+        return f"{self.user.email} → {self.course.course_name}"
 
     class Meta:
         unique_together = ('user', 'course')
