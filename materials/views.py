@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from materials.models import Course, Lesson, Subscription
 from materials.paginators import CustomPagination
-from materials.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
+from materials.serializers import CourseSerializer, LessonSerializer
 from materials.tasks import send_message_about_update
 from users.permissions import IsModerator, IsOwner
 

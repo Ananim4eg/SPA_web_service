@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from materials.models import Course, Lesson
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
@@ -36,6 +37,8 @@ class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', verbose_name='Аватар', null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     city = models.CharField(max_length=50, null=True, blank=True)
+    last_login = models.DateTimeField(_('last login'), blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -2,7 +2,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from django.conf.global_settings import SERVER_EMAIL
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -129,10 +128,12 @@ CELERY_TASK_TRACK_STARTED = True
 
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
 CELERY_BEAT_SCHEDULE = {
-    'task-name': {
-        'task': 'myapp.tasks.my_task',
-        'schedule': timedelta(minutes=10),
+    'disable_user': {
+        'task': 'materials.tasks.disable_user',
+        'schedule': timedelta(seconds=10),
     },
 }
 
@@ -141,7 +142,7 @@ EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 2525
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'new.mail.test@mail.ru'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('MAIL_APP_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SERVER_EMAIL=EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
