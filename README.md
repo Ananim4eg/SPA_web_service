@@ -23,3 +23,33 @@ python manage.py runserver
 после перейдите по ссылке [web_service][1]
 
 [1]: http://127.0.0.1:8000/ "Ссылка на страницу приложения"
+
+## Docker-compose упаковка приложения
+ + Для запуска упаковки проекта в контейнер Docker, и его последующего запуска, воспользуйтесь командой
+```
+docker-compose up -d --build
+```
+
+ + Для просмотра запущенных контейнеров
+
+``` 
+docker-compose ps
+```
+
+ + Для проверки логов контейнера
+
+``` 
+docker-compose logs -f <Имя контейнера>
+```
+
+ + Проверка redis. В ответ на команду в терминале должен быть ответ -PONG
+
+``` 
+docker exec -it redis redis-cli ping
+```
+
+ + Проверка celery и celery-beat. 
+
+``` 
+docker exec -it celery celery -A celery inspect active
+```
