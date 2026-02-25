@@ -38,7 +38,9 @@ jobs:
         run: poetry show
 
       - name: Check path
-        run: echo $PYTHONPATH
+        run: |
+          echo $PYTHONPATH
+          poetry env info
 
       - name: Run migrate
         run: |
