@@ -32,7 +32,7 @@ jobs:
         run: poetry install
 
       - name:
-          Debug: Check .env loading
+        Debug: Check .env loading
         run: |
           poetry run python -c "
           from dotenv import load_dotenv
