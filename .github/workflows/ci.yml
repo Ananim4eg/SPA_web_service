@@ -29,7 +29,9 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
 
       - name: Activate Poetry environment
-        run: poetry env use python
+        run: |
+          poetry env use python
+          poetry shell
 
       - name: Install dependencies
         run: poetry install
@@ -41,7 +43,9 @@ jobs:
         run: echo $PYTHONPATH
 
       - name: Run migrate
-        run: python manage.py migrate
+        run: |
+          export PYTHONPATH="$PYTHONPATH:C:/Users/travin/AppData/Local/pypoetry/Cache/virtualenvs/spa-web-service-Uv9bWNqs-py3.11/Lib/site-packages"
+          python manage.py migrate
 
       - name: Run tests
         run: python manage.py test
