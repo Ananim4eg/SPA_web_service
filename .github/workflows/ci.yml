@@ -15,37 +15,24 @@ jobs:
         with:
           python-version: '3.11'
 
-#      - name: Cache dependencies
-#        uses: actions/cache@v3
-#        with:
-#          path: |
-#            ~/.cache/pypoetry
-#            ~/.venv
-#          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pypoetry
+            ~/.venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
 
-      - name: Activate Poetry environment
-        run: poetry env use python
-
       - name: Install dependencies
         run: poetry install
 
-      - name: Check installed packages
-        run: poetry show
-
-      - name: Check path
-        run: |
-          echo $PYTHONPATH
-          poetry env info
-
       - name: Run migrate
-        run: |
-          export PYTHONPATH="$PYTHONPATH:${{ runner.tool_cache }}/pypoetry/virtualenvs/spa-web-service-spa-web-service-Uv9bWNqs-py3.11/Lib/site-package"
-          poetry run python manage.py migrate
+        run: poetry run python manage.py migrate
 
       - name: Run tests
         run: python manage.py test
