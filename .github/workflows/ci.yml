@@ -38,7 +38,7 @@ jobs:
           import os
           load_dotenv()
           print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
-          import sys; print(sys.path)
+          import sys; print(sys.path); ls -la
           "
 
       - name: Run migrate
