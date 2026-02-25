@@ -31,8 +31,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name:
-        Debug: Check .env loading
+      - name: Debug:Check .env loading
         run: |
           poetry run python -c "
           from dotenv import load_dotenv
