@@ -29,9 +29,7 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
 
       - name: Activate Poetry environment
-        run: |
-          poetry env use python
-          poetry shell
+        run: poetry env use python
 
       - name: Install dependencies
         run: poetry install
