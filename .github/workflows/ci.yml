@@ -37,6 +37,9 @@ jobs:
       - name: Check installed packages
         run: poetry show
 
+      - name: Check path
+        run: echo $PYTHONPATH
+
       - name: Run migrate
         run: python manage.py migrate
 
