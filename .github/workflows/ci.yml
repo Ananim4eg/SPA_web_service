@@ -31,8 +31,18 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name:
+          Debug: Check .env loading
+        run: |
+          poetry run python -c "
+          from dotenv import load_dotenv
+          import os
+          load_dotenv()
+          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'))
+          "
+
       - name: Run migrate
-        run: poetry run manage.py migrate
+        run: poetry run python manage.py migrate
 
       - name: Run tests
         run: python manage.py test
