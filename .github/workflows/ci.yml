@@ -37,8 +37,8 @@ jobs:
           from dotenv import load_dotenv
           import os
           load_dotenv()
-          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'))
-          python -c "import sys; print(sys.path)"
+          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
+          import sys; print(sys.path)
           "
 
       - name: Run migrate
