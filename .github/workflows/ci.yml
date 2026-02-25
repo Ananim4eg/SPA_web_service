@@ -28,6 +28,9 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
 
+      - name: Activate Poetry environment
+        run: poetry env use python
+
       - name: Install dependencies
         run: poetry install
 
