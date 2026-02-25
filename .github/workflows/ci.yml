@@ -38,8 +38,10 @@ jobs:
           import os
           load_dotenv()
           print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
-          import sys; print(sys.path); ls -la
+          import sys; print(sys.path)
           "
+      - name: Вывести содержимое директории
+        run: ls -la
 
       - name: Run migrate
         run: poetry run python manage.py migrate
