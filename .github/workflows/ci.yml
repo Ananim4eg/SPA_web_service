@@ -24,10 +24,15 @@ jobs:
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install Poetry
-        run: pip install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
 
       - name: Install dependencies
         run: poetry install
+
+      - name: Check installed packages
+        run: poetry show
 
       - name: Run migrate
         run: python manage.py migrate
