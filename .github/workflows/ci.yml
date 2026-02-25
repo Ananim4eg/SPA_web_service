@@ -42,7 +42,7 @@ jobs:
 
       - name: Run migrate
         run: |
-          export PYTHONPATH="$PYTHONPATH:C:/Users/travin/AppData/Local/pypoetry/Cache/virtualenvs/spa-web-service-Uv9bWNqs-py3.11/Lib/site-packages"
+          export PYTHONPATH="$PYTHONPATH:${{ runner.tool_cache }}/pypoetry/virtualenvs/spa-web-service-*"
           python manage.py migrate
 
       - name: Run tests
