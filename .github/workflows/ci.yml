@@ -37,7 +37,7 @@ jobs:
 #        run: which python
 
       - name: Вывести содержимое директории
-        run: ls -la "/home/runner/work/SPA_web_service/"
+        run: ls -la "/home/runner/work/SPA_web_service/SPA_web_service/"
 
       - name: Run migrate
         run: poetry run python manage.py migrate
