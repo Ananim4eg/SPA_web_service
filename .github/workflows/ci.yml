@@ -23,26 +23,24 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Debug:Check .env loading
-        run: |
-          poetry run python -c "
-          from dotenv import load_dotenv
-          import os
-          load_dotenv()
-          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
-          import sys; print(sys.path)
-          "
+#      - name: Debug:Check .env loading
+#        run: |
+#          poetry run python -c "
+#          from dotenv import load_dotenv
+#          import os
+#          load_dotenv()
+#          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
+#          import sys; print(sys.path)
+#          "
 
-      - name: Show python path
-        run: which python
+#      - name: Show python path
+#        run: which python
 
-      - name: Вывести содержимое директории
-        run: ls -la "/home/runner/.cache/pypoetry/virtualenvs/spa-web-service-S5fFEFeG-py3.11/bin"
+#      - name: Вывести содержимое директории
+#        run: ls -la "/home/runner/.cache/pypoetry/virtualenvs/spa-web-service-S5fFEFeG-py3.11/bin"
 
       - name: Activate and verify virtual environment
-        run: |
-          source venv/bin/activate
-          echo "Python executable: $(python -c 'import sys; print(sys.executable)')"
+        run:
           if [ -z "$VIRTUAL_ENV" ]; then
             echo "Virtual environment not activated!"
             exit 1
