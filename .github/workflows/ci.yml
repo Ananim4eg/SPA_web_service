@@ -40,8 +40,10 @@ jobs:
 #          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
 #          import sys; print(sys.path)
 #          "
+      - name: Start PostgreSQL
+        run: sudo systemctl start postgresql
 
-      - name: Show python path
+      - name: Check PostgreSQL
         run: sudo systemctl status postgresql
 
       - name: Вывести содержимое директории
