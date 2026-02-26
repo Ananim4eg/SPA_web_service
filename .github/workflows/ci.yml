@@ -38,10 +38,17 @@ jobs:
           import os
           load_dotenv()
           print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
-          import sys; print(sys.path)
+          import sys; print(sys.path); where python
           "
       - name: Вывести содержимое директории
         run: ls -la
+
+      - name: Verify virtual environment
+        run: |
+          if [ -z "$VIRTUAL_ENV" ]; then
+            echo "Virtual environment not activated!"
+            exit 1
+          fi
 
       - name: Run migrate
         run: poetry run python manage.py migrate
