@@ -28,9 +28,11 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
 
+      - name: Create virtual environment
+        run: python -m venv venv
+
       - name: Activate virtual environment
-        run: |
-          source venv/bin/activate
+        run: source venv/bin/activate
 
       - name: Install dependencies
         run: poetry install
