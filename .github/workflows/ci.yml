@@ -23,6 +23,11 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Create .env file
+        run: |
+          echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" > .env
+          echo "DEBUG=True" >> .env
+
 #      - name: Debug:Check .env loading
 #        run: |
 #          poetry run python -c "
