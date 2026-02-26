@@ -37,7 +37,7 @@ jobs:
 #        run: which python
 
       - name: Вывести содержимое директории
-        run: ls -la "/home/runner/.cache/pypoetry/virtualenvs/spa-web-service-S5fFEFeG-py3.11/lib/python3.11/site-packages"
+        run: ls -la "/home/runner/work/"
 
       - name: Run migrate
         run: poetry run python manage.py migrate
