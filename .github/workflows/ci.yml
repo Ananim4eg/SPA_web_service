@@ -31,9 +31,6 @@ jobs:
       - name: Create virtual environment
         run: python -m venv venv
 
-      - name: Activate virtual environment
-        run: source venv/bin/activate
-
       - name: Install dependencies
         run: poetry install
 
@@ -53,8 +50,10 @@ jobs:
       - name: Вывести содержимое директории
         run: ls -la
 
-      - name: Verify virtual environment
+      - name: Activate and verify virtual environment
         run: |
+          source venv/bin/activate
+          echo "Python executable: $(python -c 'import sys; print(sys.executable)')"
           if [ -z "$VIRTUAL_ENV" ]; then
             echo "Virtual environment not activated!"
             exit 1
