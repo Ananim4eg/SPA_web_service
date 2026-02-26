@@ -15,16 +15,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Delete cache
-        run: rm -rf ~/.cache/pypoetry/virtualenvs/
-
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
-
-      - name: Create virtual environment
-        run: python -m venv venv
 
       - name: Install dependencies
         run: poetry install
