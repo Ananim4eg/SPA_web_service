@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: check config
+        run: poetry config --list
+
       - name: Run migrate
         run: poetry run python manage.py migrate
 
