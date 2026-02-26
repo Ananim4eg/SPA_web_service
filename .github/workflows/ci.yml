@@ -37,9 +37,12 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
+      - name: Logs of PostgreSQL
+        run: docker logs postgres
+
       - name: Wait for PostgreSQL to be ready
         run: |
-          until pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -h ${{ secrets.POSTGRES_PASSWORD }} -p 5432; do
+          until pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -h postgres -p 5432; do
             echo 'Waiting for PostgreSQL...'
             sleep 2
           done
