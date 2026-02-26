@@ -29,6 +29,9 @@ jobs:
       - name: check config
         run: poetry config --list
 
+      - name: path check
+        run: poetry env info -p
+
       - name: Run migrate
         run: poetry run python manage.py migrate
 
