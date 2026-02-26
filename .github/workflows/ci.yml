@@ -48,7 +48,7 @@ jobs:
         run: which python
 
       - name: Вывести содержимое директории
-        run: ls -la
+        run: ls -la "/home/runner/.cache/pypoetry/virtualenvs"
 
       - name: Activate and verify virtual environment
         run: |
