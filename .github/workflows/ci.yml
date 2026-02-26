@@ -37,13 +37,18 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
-      - name: Set up database
+      - name: Wait for PostgreSQL to be ready
         run: |
-          echo "HOST=localhost" >> .env
-          echo "PORT=5432" >> .env
-          echo ${{ secrets.POSTGRES_DB }} >> .env
-          echo ${{ secrets.POSTGRES_USER }} >> .env
-          echo ${{ secrets.POSTGRES_PASSWORD }} >> .env
+          until pg_isready -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} -h postgres -p 5432; do
+            echo 'Waiting for PostgreSQL...'
+            sleep 2
+          done
+          echo 'PostgreSQL is ready!'
+
+      - name: Set Django environment variables
+        run: |
+          echo "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}" >> .env
+          echo "DJANGO_DEBUG=False" >> .env
 
       - name: Run database migrations (test)
         run: poetry run python manage.py migrate --no-input
