@@ -15,6 +15,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+
       - name: Install dependencies
         run: poetry install
 
@@ -33,13 +38,6 @@ jobs:
 
 #      - name: Вывести содержимое директории
 #        run: ls -la "/home/runner/.cache/pypoetry/virtualenvs/spa-web-service-S5fFEFeG-py3.11/bin"
-
-      - name: Activate and verify virtual environment
-        run:
-          if [ -z "$VIRTUAL_ENV" ]; then
-            echo "Virtual environment not activated!"
-            exit 1
-          fi
 
       - name: Run migrate
         run: poetry run python manage.py migrate
