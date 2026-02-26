@@ -42,7 +42,7 @@ jobs:
           "
 
       - name: Show python path
-        run: where python
+        run: which python
 
       - name: Вывести содержимое директории
         run: ls -la
