@@ -41,8 +41,8 @@ jobs:
 #          import sys; print(sys.path)
 #          "
 
-#      - name: Show python path
-#        run: which python
+      - name: Show python path
+        run: sudo systemctl status postgresql
 
       - name: Вывести содержимое директории
         run: ls -la "/home/runner/work/SPA_web_service/SPA_web_service/"
