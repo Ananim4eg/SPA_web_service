@@ -26,6 +26,15 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Print PYTHONPATH
+        run: echo $PYTHONPATH
+
+      - name: Show project structure
+        run: tree -L 3  # показывает структуру проекта на 3 уровня
+
+      - name: Show Python version and path
+        run: python --version && which python
+
       - name: check config
         run: poetry config --list
 
