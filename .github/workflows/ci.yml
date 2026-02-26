@@ -37,13 +37,13 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
-#      - name: Set up database
-#        run: |
-#          echo "HOST=localhost" >> .env
-#          echo "PORT=5432" >> .env
-#          echo "NAME=django_test" >> .env
-#          echo "USER=django" >> .env
-#          echo "PASSWORD=django" >> .env
+      - name: Set up database
+        run: |
+          echo "HOST=localhost" >> .env
+          echo "PORT=5432" >> .env
+          echo ${{ secrets.POSTGRES_DB }} >> .env
+          echo ${{ secrets.POSTGRES_USER }} >> .env
+          echo ${{ secrets.POSTGRES_PASSWORD }} >> .env
 
       - name: Run database migrations (test)
         run: poetry run python manage.py migrate --no-input
