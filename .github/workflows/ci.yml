@@ -5,12 +5,22 @@ on: [push, pull_request]
 env:
   SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
-jobs:
+jjobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -19,32 +29,29 @@ jobs:
           python-version: '3.11'
 
       - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          export PATH="$HOME/.local/bin:$PATH"
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --no-interaction
 
-      - name: Print PYTHONPATH
-        run: echo $PYTHONPATH
+#      - name: Set up database
+#        run: |
+#          echo "HOST=localhost" >> .env
+#          echo "PORT=5432" >> .env
+#          echo "NAME=django_test" >> .env
+#          echo "USER=django" >> .env
+#          echo "PASSWORD=django" >> .env
 
-      - name: Show project structure
-        run: tree -L 3  # показывает структуру проекта на 3 уровня
+      - name: Run database migrations (test)
+        run: poetry run python manage.py migrate --no-input
 
-      - name: Show Python version and path
-        run: python --version && which python
+      - name: Collect static files (test)
+        run: poetry run python manage.py collectstatic --no-input
 
-      - name: check config
-        run: poetry config --list
-
-      - name: path check
-        run: poetry env info -p
-
-      - name: Run migrate
-        run: poetry run python manage.py migrate
-
-      - name: Run tests
+      - name: Run Django tests
         run: poetry run python manage.py test
 
   build:
