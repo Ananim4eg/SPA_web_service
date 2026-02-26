@@ -2,75 +2,59 @@ name: Django CI
 
 on: [push, pull_request]
 
+env:
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: curl -sSL https://install.python-poetry.org | python3 -
-      - run: poetry install
-      - run: echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" > .env
-      - run: echo "DEBUG=True" >> .env
-      - run: docker-compose up -d  # запускает PostgreSQL и приложение
-      - run: docker-compose exec app poetry run python manage.py migrate
-      - run: docker-compose exec app poetry run python manage.py test
-      - run: docker-compose down  # очищает контейнеры после джобы
-#env:
-#  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-#
-#jobs:
-#  test:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v3
-#
-#      - name: Set up Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.11'
-#
-#      - name: Install Poetry
-#        run: |
-#          curl -sSL https://install.python-poetry.org | python3 -
-#          export PATH="$HOME/.local/bin:$PATH"
-#
-#      - name: Install dependencies
-#        run: poetry install
-#
-#      - name: Create .env file
-#        run: |
-#          echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" > .env
-#          echo "DEBUG=True" >> .env
-#
-##      - name: Debug:Check .env loading
-##        run: |
-##          poetry run python -c "
-##          from dotenv import load_dotenv
-##          import os
-##          load_dotenv()
-##          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
-##          import sys; print(sys.path)
-##          "
-#
-#      - name: Start PostgreSQL
-#        run: sudo systemctl start postgresql
-#
-#      - name: Check PostgreSQL
-#        run: sudo systemctl status postgresql
-#
-#      - name: Вывести содержимое директории
-#        run: ls -la "/home/runner/work/SPA_web_service/SPA_web_service/"
-#
-#      - name: Run migrate
-#        run: poetry run python manage.py migrate
-#
-#      - name: Run tests
-#        run: poetry run python manage.py test
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Create .env file
+        run: |
+          echo "SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" > .env
+          echo "DEBUG=True" >> .env
+
+      - name: Debug:Check .env loading
+        run: |
+          poetry run python -c "
+          from dotenv import load_dotenv
+          import os
+          load_dotenv()
+          print('SECRET_KEY:', os.environ.get('SECRET_KEY', 'NOT FOUND'));
+          import sys; print(sys.path)
+          "
+
+      - name: Start PostgreSQL
+        run: sudo systemctl start postgresql
+
+      - name: Check PostgreSQL
+        run: sudo systemctl status postgresql
+
+      - name: Вывести содержимое директории
+        run: ls -la "/home/runner/work/SPA_web_service/SPA_web_service/"
+
+      - name: Run migrate
+        run: poetry run python manage.py migrate
+
+      - name: Run tests
+        run: poetry run python manage.py test
 
   build:
     needs: test
