@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True if os.getenv('DEBUG') == 'True' else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['158.160.229.35']
 
 
 INSTALLED_APPS = [
@@ -109,6 +109,7 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static/"
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
