@@ -38,8 +38,10 @@ jobs:
         run: poetry install --no-interaction
 
       - name: django settings
-        run:
+        run: |
+          echo "Current PYTHONPATH: $PYTHONPATH"
           export PYTHONPATH="${PYTHONPATH}:/home/runner/work/SPA_web_service/SPA_web_service"
+          echo "Updated PYTHONPATH: $PYTHONPATH"
           export DJANGO_SETTINGS_MODULE=config.settings
 
       - name: Set Django environment variables
@@ -52,6 +54,13 @@ jobs:
           echo "PYTHONPATH: $PYTHONPATH"
           echo "DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
           echo "PATH to settings: $(python -c "import os; print(os.getenv('DJANGO_SETTINGS_MODULE'))")"
+
+      - name: django settings 2
+        run: |
+          echo "Current PYTHONPATH: $PYTHONPATH"
+          export PYTHONPATH="${PYTHONPATH}:/home/runner/work/SPA_web_service/SPA_web_service"
+          echo "Updated PYTHONPATH: $PYTHONPATH"
+          export DJANGO_SETTINGS_MODULE=config.settings
 
       - name: Wait for PostgreSQL to be ready
         run: |
