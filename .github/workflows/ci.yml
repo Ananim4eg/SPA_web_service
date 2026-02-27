@@ -37,17 +37,15 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
-      - name: Set Django environment variables
-        run: |
-          echo "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}" >> .env
-          echo "DJANGO_DEBUG=False" >> .env
-
       - name: Check and start Postgresql
         run: |
           sudo apt list --installed | grep postgresql
           sudo systemctl status postgresql
+          sudo systemctl enable postgresql
           sudo systemctl start postgresql
           sudo systemctl status postgresql
+          sudo journalctl -u postgresql
+          sudo cat /var/log/postgresql/*.log
 
       - name: Wait for PostgreSQL to be ready
         run: |
