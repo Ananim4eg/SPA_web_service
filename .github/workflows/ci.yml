@@ -35,7 +35,7 @@ jobs:
           virtualenvs-in-project: true
 
       - name: django settings
-        runs: export DJANGO_SETTINGS_MODULE=config.settings
+        run: export DJANGO_SETTINGS_MODULE=config.settings
 
       - name: Install dependencies
         run: poetry install --no-interaction
