@@ -37,30 +37,16 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction
 
-      - name: django settings
-        run: |
-          echo "Current PYTHONPATH: $PYTHONPATH"
-          export PYTHONPATH="${PYTHONPATH}:/home/runner/work/SPA_web_service/SPA_web_service"
-          echo "Updated PYTHONPATH: $PYTHONPATH"
-          export DJANGO_SETTINGS_MODULE=config.settings
-
       - name: Set Django environment variables
         run: |
           echo "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}" >> .env
           echo "DJANGO_DEBUG=False" >> .env
 
-      - name: log
+      - name: Check and start Postgresql
         run: |
-          echo "PYTHONPATH: $PYTHONPATH"
-          echo "DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
-          echo "PATH to settings: $(python -c "import os; print(os.getenv('DJANGO_SETTINGS_MODULE'))")"
-
-      - name: django settings 2
-        run: |
-          echo "Current PYTHONPATH: $PYTHONPATH"
-          export PYTHONPATH="${PYTHONPATH}:/home/runner/work/SPA_web_service/SPA_web_service"
-          echo "Updated PYTHONPATH: $PYTHONPATH"
-          export DJANGO_SETTINGS_MODULE=config.settings
+          sudo systemctl status postgresql
+          sudo systemctl start postgresql
+          sudo systemctl status postgresql
 
       - name: Wait for PostgreSQL to be ready
         run: |
