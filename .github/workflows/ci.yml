@@ -47,6 +47,12 @@ jobs:
           echo "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}" >> .env
           echo "DJANGO_DEBUG=False" >> .env
 
+      - name: log
+        run: |
+          echo "PYTHONPATH: $PYTHONPATH"
+          echo "DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE"
+          echo "PATH to settings: $(python -c "import os; print(os.getenv('DJANGO_SETTINGS_MODULE'))")"
+
       - name: Wait for PostgreSQL to be ready
         run: |
           until poetry run python -c "from django.db import connection; connection.ensure_connection()"; do
