@@ -39,13 +39,11 @@ jobs:
 
       - name: Check and start Postgresql
         run: |
-          sudo apt list --installed | grep postgresql
-          sudo systemctl status postgresql
-          sudo systemctl enable postgresql
-          sudo systemctl start postgresql
-          sudo systemctl status postgresql
-          sudo journalctl -u postgresql
+          ls -la /var/lib/postgresql/
+          ls -la /var/run/postgresql/
+          sudo journalctl -u postgresql -n 50
           sudo cat /var/log/postgresql/*.log
+          sudo systemctl start postgresql
 
       - name: Wait for PostgreSQL to be ready
         run: |
