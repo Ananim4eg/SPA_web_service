@@ -39,7 +39,7 @@ jobs:
 
       - name: Check and start Postgresql
         run:
-          ls -la /var/run/
+          ls -la /var/run/postgresql
 
       - name: Wait for PostgreSQL to be ready
         run: |
