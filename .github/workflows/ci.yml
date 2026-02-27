@@ -44,6 +44,7 @@ jobs:
 
       - name: Check and start Postgresql
         run: |
+          sudo apt list --installed | grep postgresql
           sudo systemctl status postgresql
           sudo systemctl start postgresql
           sudo systemctl status postgresql
