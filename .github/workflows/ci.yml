@@ -64,6 +64,8 @@ jobs:
 
       - name: Wait for PostgreSQL to be ready
         run: |
+          export PYTHONPATH="${PYTHONPATH}:/home/runner/work/SPA_web_service/SPA_web_service"
+          export DJANGO_SETTINGS_MODULE=config.settings
           until poetry run python -c "from django.db import connection; connection.ensure_connection()"; do
             echo "Waiting for PostgreSQL..."
             sleep 2
