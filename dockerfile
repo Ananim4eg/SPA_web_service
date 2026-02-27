@@ -19,6 +19,8 @@ COPY . .
 
 RUN poetry install --no-interaction --no-ansi
 
+RUN pip install gunicorn
+
 RUN mkdir -p /app/staticfiles && chmod -R 755 /app/staticfiles
 
 EXPOSE 8000
