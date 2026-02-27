@@ -82,8 +82,6 @@ jobs:
 #
 #      - name: Push Docker image to Docker Hub
 #        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -91,10 +89,13 @@ jobs:
       - name: Build with Docker Compose
         run: docker compose build
 
+      - name: check image
+        run: docker images
+
       - name: Tag and push image
         run: |
-          docker tag myproject_web:latest ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:eb0a38f38aa6751312d5003f4a651bd685777696
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:eb0a38f38aa6751312d5003f4a651bd685777696
+          docker tag myproject_web:latest ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
 
 #  deploy:
 #    runs-on: ubuntu-latest
