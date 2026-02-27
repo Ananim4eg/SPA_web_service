@@ -93,8 +93,8 @@ jobs:
 
       - name: Tag and push image
         run: |
-          docker tag myproject_web:latest ***/myapp:eb0a38f38aa6751312d5003f4a651bd685777696
-          docker push ***/myapp:eb0a38f38aa6751312d5003f4a651bd685777696
+          docker tag myproject_web:latest ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:eb0a38f38aa6751312d5003f4a651bd685777696
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:eb0a38f38aa6751312d5003f4a651bd685777696
 
 #  deploy:
 #    runs-on: ubuntu-latest
