@@ -39,7 +39,7 @@ jobs:
 
       - name: Check and start Postgresql
         run: |
-          sudo systemctl status postgresql;
+          sudo systemctl status postgresql
 #          ls -la /var/run/postgresql;
 #          sudo apt-get install postgresql;
 #          ls -la /var/run/postgresql;
